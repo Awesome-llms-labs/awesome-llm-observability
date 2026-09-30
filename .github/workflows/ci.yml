@@ -1,0 +1,62 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  links:
+    name: Link check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --config .lychee.toml --no-progress './**/*.md'
+          fail: true
+
+  data:
+    name: Validate data files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate llm-observability.json
+        run: |
+          python3 - <<'EOF'
+          import json
+
+          required = {"name", "vendor", "url", "description", "category",
+                      "status", "verified", "verified_date", "verified_source", "note"}
+          categories = {"tracing", "eval", "guardrails", "gateway", "benchmark"}
+          statuses = {"active", "maintenance", "archived"}
+
+          path = "data/llm-observability.json"
+          data = json.load(open(path))
+          assert isinstance(data, list) and data, f"{path} must be a non-empty list"
+          for i, e in enumerate(data):
+              missing = required - e.keys()
+              assert not missing, f"{path} entry {i} ({e.get('name')}) missing {missing}"
+              assert e["category"] in categories, f"{path} entry {i} bad category {e['category']}"
+              assert e["status"] in statuses, f"{path} entry {i} bad status {e['status']}"
+              assert isinstance(e["verified"], bool), f"{path} entry {i} verified not bool"
+              assert e["url"].startswith("https://"), f"{path} entry {i} url must be https"
+              assert e["description"].strip(), f"{path} entry {i} empty description"
+              if e["verified"]:
+                  assert e["verified_date"], f"{path} entry {i} verified needs verified_date"
+                  assert e["verified_source"].startswith("https://"), \
+                      f"{path} entry {i} verified needs https verified_source"
+          names = [e["name"] for e in data]
+          assert len(names) == len(set(names)), f"{path} duplicate names"
+
+          # README/JSON consistency: every JSON entry name must appear in README
+          readme = open("README.md").read()
+          missing_readme = [n for n in names if n not in readme]
+          assert not missing_readme, f"entries missing from README: {missing_readme}"
+
+          print(f"OK: {path}: {len(data)} entries validated")
+          EOF
