@@ -958,5 +958,17 @@
     "verified_date": "2026-09-30",
     "verified_source": "https://github.com/allenai/WildBench",
     "note": ""
+  },
+  {
+    "name": "OpenClaw Monitor",
+    "vendor": "flik2002",
+    "url": "https://github.com/flik2002/openclaw-monitor",
+    "description": "Free open-source web dashboard for monitoring OpenClaw AI agents: token usage, session tracking, and 7-day trends with multi-model support.",
+    "category": "tracing",
+    "status": "active",
+    "verified": true,
+    "verified_date": "2026-10-04",
+    "verified_source": "https://github.com/flik2002/openclaw-monitor",
+    "note": ""
   }
 ]
