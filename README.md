@@ -42,6 +42,7 @@ Standard APM sees HTTP 200; it can't see a hallucination. This list covers the t
 - [AgentOps](https://github.com/AgentOps-AI/agentops) — Agent monitoring with session replays plus cost and latency tracking across frameworks. `✅ verified 2026-09-30`
 - [Pydantic Logfire](https://github.com/pydantic/logfire) — OpenTelemetry-based observability for LLM and agent apps from the Pydantic team. `✅ verified 2026-09-30`
 - [OpenTelemetry GenAI Semantic Conventions](https://github.com/open-telemetry/semantic-conventions-genai) — The (still experimental) standard attribute names for GenAI spans: gen_ai.* conventions. `✅ verified 2026-09-30`
+- [OpenClaw Monitor](https://github.com/flik2002/openclaw-monitor) - Free open-source web dashboard for monitoring OpenClaw AI agents: token usage, session tracking, and 7-day trends with multi-model support. `[x] verified 2026-10-04 (repo resolves; not self-scored)`
 
 ## Evaluation Harnesses & Eval-Ops
 
